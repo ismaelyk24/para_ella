@@ -1,0 +1,74 @@
+import tkinter as tk
+import random
+
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("Para ti, mi amor")
+ventana.geometry("600x600")
+ventana.config(bg="#FFC0CB")  # Fondo rosado
+
+# Crear el lienzo para animaciones
+lienzo = tk.Canvas(ventana, width=600, height=600, bg="#FFC0CB", highlightthickness=0)
+lienzo.pack()
+
+# Añadir el mensaje "Te quiero mucho" en el centro superior
+mensaje = tk.Label(ventana, text="Te quiero mucho ❤️", font=("Arial", 32, "bold"), bg="#FFC0CB", fg="#FF69B4")
+mensaje.place(x=150, y=10)
+
+# Listas para almacenar los corazones y las flores
+corazones = []
+flores = []
+
+# Función para crear corazones animados con tamaños aleatorios
+def crear_corazon():
+    x = random.randint(50, 550)  # Posición horizontal aleatoria
+    size = random.randint(30, 50)  # Tamaño aleatorio para los corazones
+    corazon = lienzo.create_text(x, 0, text="❤️", font=("Arial", size), fill="#FF69B4")
+    corazones.append(corazon)
+    mover_corazon(corazon)
+
+# Función para mover los corazones de forma realista
+def mover_corazon(corazon):
+    x, y = lienzo.coords(corazon)
+    if y < 600:
+        # Movimiento ligeramente hacia los lados para mayor realismo
+        lienzo.move(corazon, random.choice([-2, -1, 0, 1, 2]), 5)
+        ventana.after(50, mover_corazon, corazon)
+    else:
+        lienzo.delete(corazon)  # Eliminar cuando sale de la pantalla
+        corazones.remove(corazon)
+
+# Función para crear flores animadas con tamaños aleatorios
+def crear_flor():
+    x = random.randint(50, 550)  # Posición horizontal aleatoria
+    size = random.randint(25, 45)  # Tamaño aleatorio para las flores
+    flor = lienzo.create_text(x, 0, text="🌸", font=("Arial", size), fill="#FF69B4")
+    flores.append(flor)
+    mover_flor(flor)
+
+# Función para mover las flores de forma realista
+def mover_flor(flor):
+    x, y = lienzo.coords(flor)
+    if y < 600:
+        # Movimiento ligeramente hacia los lados para mayor realismo
+        lienzo.move(flor, random.choice([-2, -1, 0, 1, 2]), 4)
+        ventana.after(50, mover_flor, flor)
+    else:
+        lienzo.delete(flor)  # Eliminar cuando sale de la pantalla
+        flores.remove(flor)
+
+# Crear animaciones de corazones y flores cada cierto tiempo
+def animar():
+    crear_corazon()
+    crear_flor()
+    ventana.after(1000, animar)  # Repetir cada 1 segundo
+
+# Iniciar la animación
+animar()
+
+# Crear un botón de cierre
+boton_cerrar = tk.Button(ventana, text="Cerrar", font=("Arial", 16), bg="#FF69B4", fg="#FFFFFF", command=ventana.quit)
+boton_cerrar.place(x=250, y=550)
+
+# Ejecutar la ventana
+ventana.mainloop()
